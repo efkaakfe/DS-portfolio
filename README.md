@@ -1,3 +1,3 @@
 # Data Science portfolio
 
-This repository contains Data Science projects from various areas.
+This repository contains selected Data Science projects from various areas.
