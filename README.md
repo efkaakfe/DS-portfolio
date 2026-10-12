@@ -1,6 +1,6 @@
 # Data Science portfolio
 
-This repository contains selected Data Science projects from various areas:
+This repository contains part of my Data Science projects:
 
 *   Walmart sales prediction: prediction of Walmart sales per store based on the dataset from M5 competition
 *   Sales prediciton - Neural Networks: sales prediction per item using several Deep Learning models
