@@ -1,31 +1,15 @@
-import math
 import pandas as pd
 import seaborn as sns
 import numpy as np
-import statistics
 import matplotlib.pyplot as plt
-import xgboost as xgb
-import optuna
-import os
-from scipy import stats
-from sklearn.metrics import roc_curve, roc_auc_score, f1_score, precision_score, recall_score, precision_recall_curve
-from sklearn.pipeline import FeatureUnion, Pipeline
-from imblearn.pipeline import Pipeline as imbPipeline
-from imblearn.pipeline import make_pipeline
+from sklearn.metrics import recall_score
+from sklearn.pipeline import  Pipeline
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from sklearn.preprocessing import LabelEncoder,OneHotEncoder
-from sklearn.feature_selection import SelectFromModel
-from imblearn.over_sampling import SMOTENC
-from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.preprocessing import LabelEncoder,OneHotEncoder, OrdinalEncoder
+from sklearn.model_selection import train_test_split
 from sklearn.dummy import DummyClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from xgboost.sklearn import XGBClassifier
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import StratifiedKFold
-from optuna.samplers import TPESampler
+
 
 
 import warnings
@@ -59,7 +43,34 @@ def plot_corr(dt:pd.DataFrame)->None:
     plt.title('Correlations between features')
     sns.heatmap(df.corr(method='spearman').round(2),annot=True,vmin=-1,vmax=1)
     plt.show()
+
+class DataTransformer(BaseEstimator, TransformerMixin):
+    def __init__(self):
+        self.encoder = OrdinalEncoder()
+        self.cols = ['Gender', 'Vehicle_Age', 'Vehicle_Damage']
+        self.cat_cols = ['Gender', 'Vehicle_Age', 'Vehicle_Damage','Driving_License','Previously_Insured']
+        self.num_cols = None
+
+    def fit(self, X, y=None):
+        X_tr = X.copy()
+        X_tr = X_tr.drop('id', axis=1)
+        X_tr.loc[(X_tr['Vehicle_Age']=="> 2 Years")|(X_tr['Vehicle_Age']=="1-2 Year"),"Vehicle_Age"] = ">1Year"
+        self.encoder.fit(X_tr[self.cols])
+        self.num_cols = X_tr.columns.difference(self.cat_cols).tolist()
+        self.cat_idx = [i for i, col in enumerate(X_tr.columns) if col in self.cat_cols]
+        return self
     
+    def transform(self, X, y = None):
+        X_tr = X.copy()
+        X_tr = X_tr.drop('id', axis=1)
+        X_tr.loc[(X_tr['Vehicle_Age']=="> 2 Years")|(X_tr['Vehicle_Age']=="1-2 Year"),"Vehicle_Age"] = ">1Year"
+
+        X_tr[self.cols] = self.encoder.transform(X_tr[self.cols]).astype('int32')
+
+        for col in self.cat_cols:
+            X_tr[col] = X_tr[col].fillna(0).astype('int32')
+        return X_tr
+
 def baseline()->DummyClassifier:
     """Trains Dummy Classifier and returns metrics on the test set"""
     # Preprocessing
