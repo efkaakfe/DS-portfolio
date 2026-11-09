@@ -12,6 +12,7 @@ import optuna
 from IPython.display import display
 from pathlib import Path
 from modules.optimization import *
+from modules.preprocessing import *
 from modules.mlp import *
 from catboost import CatBoostClassifier
 from sklearn.metrics import recall_score
@@ -35,34 +36,6 @@ DATA_PATH = PROJECT_ROOT / 'data' / 'train.csv'
 MODEL_PATH = PROJECT_ROOT / 'artifacts'
 CONFIG_PATH = PROJECT_ROOT / 'config.json'
 
-class DataTransformer(BaseEstimator, TransformerMixin):
-    def __init__(self):
-        self.encoder = OrdinalEncoder()
-        self.cols = ['Gender', 'Vehicle_Age', 'Vehicle_Damage']
-        self.cat_cols = ['Gender', 'Vehicle_Age', 'Vehicle_Damage','Driving_License','Previously_Insured']
-        self.num_cols = None
-
-    def fit(self, X, y=None):
-        X_tr = X.copy()
-        X_tr = X_tr.drop('id', axis=1)
-        X_tr.loc[(X_tr['Vehicle_Age']=="> 2 Years")|(X_tr['Vehicle_Age']=="1-2 Year"),"Vehicle_Age"] = ">1Year"
-        self.encoder.fit(X_tr[self.cols])
-        self.num_cols = X_tr.columns.difference(self.cat_cols).tolist()
-        self.cat_idx = [i for i, col in enumerate(X_tr.columns) if col in self.cat_cols]
-        return self
-    
-    def transform(self, X, y = None):
-        X_tr = X.copy()
-        X_tr = X_tr.drop('id', axis=1)
-        X_tr.loc[(X_tr['Vehicle_Age']=="> 2 Years")|(X_tr['Vehicle_Age']=="1-2 Year"),"Vehicle_Age"] = ">1Year"
-
-        X_tr[self.cols] = self.encoder.transform(X_tr[self.cols]).astype('int32')
-
-        for col in self.cat_cols:
-            X_tr[col] = X_tr[col].fillna(0).astype('int32')
-        return X_tr
-    
-
 def recall_eval(preds, data):
     y_true = data.get_label()
     y_pred = (preds >= 0.5).astype(int)
@@ -76,7 +49,7 @@ def train(config:json)->None:
 
     X = pd.read_csv(DATA_PATH)
 
-    train, val = train_test_split(X, test_size=0.25, stratify=X['Response'])
+    train, val = train_test_split(X, test_size=0.25, stratify=X['Response'], random_state=42)
     tr = DataTransformer()
     train = tr.fit_transform(train)
     val = tr.transform(val)
