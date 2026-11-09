@@ -6,6 +6,8 @@ This project analyzes and predicts customer responses to a vehicle insurance off
 
 `Imbalanced classification.ipynb` documents the experiment, including exploratory data analysis, metric selection, feature preparation, baseline models (Dummy Classifier, CatBoost, LightGBM, and MLP), optimization, and evaluation on the test set. It explores three ways to handle class imbalance: SMOTE-NC (`sampling`), class weights (`weights`), and probability threshold tuning (`prob`).
 
+The best model turns out to be Neural Network with recall score 1.0 on the test dataset (imbalance method: weights calibration), but there is still room for improving other models.
+
 ## Project structure
 
 - `data/train.csv` — training data, including the `Response` column.
