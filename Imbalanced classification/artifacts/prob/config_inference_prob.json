@@ -1,0 +1,1 @@
+{"model_name": "LightGBM", "features": [true, true, false, false, true, false, false, false, false, false], "method": "prob", "data_transformer": "./artifacts\\prob\\data_tr.pkl", "model_path": "./artifacts\\prob\\model.pkl", "threshold": 0.6954882941711971}

@@ -1,0 +1,1 @@
+{"model_name": "MLP", "method": "baseline", "data_transformer": "./artifacts\\baseline\\data_tr.pkl", "model_path": "./artifacts\\baseline\\model.pth", "preprocessor_path": "./artifacts\\baseline\\preprocessor.pkl"}

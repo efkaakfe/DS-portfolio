@@ -1,0 +1,1 @@
+{"model_name": "MLP", "features": [false, false, false, false, false, false, true, true, false, true], "method": "weights", "data_transformer": "./artifacts\\weights\\data_tr.pkl", "model_path": "./artifacts\\weights\\model.pth", "preprocessor_path": "./artifacts\\weights\\preprocessor.pkl"}

@@ -1,0 +1,1 @@
+{"model_name": "MLP", "features": [true, true, false, true, true, false, false, true, false, false], "method": "sampling", "data_transformer": "./artifacts\\sampling\\data_tr.pkl", "model_path": "./artifacts\\sampling\\model.pth", "preprocessor_path": "./artifacts\\sampling\\preprocessor.pkl", "sampling_path": "./artifacts\\sampling\\sampling.pkl"}
