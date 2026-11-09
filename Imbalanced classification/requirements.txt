@@ -1,0 +1,16 @@
+# Required Python version: 3.13.0
+
+# Runtime dependencies for scripts/train.py, scripts/inference.py, and imported modules
+
+catboost==1.2.10
+imbalanced-learn==0.14.2
+ipython==9.13.0
+lightgbm==4.7.0
+matplotlib==3.11.1
+numpy==2.5.1
+optuna==4.9.0
+pandas==3.0.5
+scikit-learn==1.9.0
+torch==2.13.0
+tqdm==4.70.0
+
