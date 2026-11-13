@@ -22,19 +22,17 @@ This project analyzes Walmart's daily product sales and forecasts the next 28 da
 | Prophet, univariate | 1.1709 | Test, 15% subset |
 | Prophet, multivariate | 1.1583 | Test, 15% subset |
 | Holt-Winters | 1.1528 | Test, 15% subset |
-| LSTM | 1.6403 | Test, 15% subset |
-| LightGBM, initial features | 1.1572 | Test, 15% subset |
-| LightGBM, rolling features and tuning | 1.0876 | Test, 15% subset |
-| LightGBM, retrained with test data | 1.0082 | Validation, 15% subset |
+| LSTM | 1.6403 | Test, full data |
+| LightGBM, initial features | 1.1572 | Test, full data |
+| LightGBM, rolling features and tuning | 1.0876 | Test, full data|
+| LightGBM, retrained with test data | 1.0082 | Validation, full data|
 
-The subset-based results should be interpreted separately from the full-data baseline results. The notebook reports that rolling mean and standard deviation features improve LightGBM on the test subset. Its feature importance analysis also highlights recent sales history and price. Holt-Winters is the strongest of the reported full-data baseline models. Prophet performs similarly to Holt-Winters on the subset, while the LSTM produces relatively flat forecasts and has the highest WRMSSE among the reported subset models.
+The subset-based results should be interpreted separately from the full-data baseline results, but indicate Prophet model would not be the best approach for this dataset. The notebook reports that LightGBM performs better than simple models on test and validation sets. 
 
 Residual checks for sampled LightGBM series indicate autocorrelation, non-constant variance, and departures from normality. These findings suggest that the model does not capture all structure in the sales series.
 
 ## Conclusions and next steps
 
-The experiments show that feature engineering can improve forecasting quality: adding rolling sales statistics lowers LightGBM's test WRMSSE from 1.1572 to 1.0876 on the sampled series. The validation result is 1.0082 for the retrained model. These results are promising, though comparisons across the full dataset and the 15% subset are not directly equivalent.
-
-Further improvement could come from adding other sales lags and longer rolling windows, selecting features more systematically, and expanding hyperparameter searches. More time and computational power would make it possible to run broader experiments, tune more complex models, and assess improvements more thoroughly. Therefore, the reported results are a useful starting point and can be further improved with additional time and compute.
+The experiments show that feature engineering can improve forecasting quality: adding rolling sales statistics lowers LightGBM's test WRMSSE from 1.1572 to 1.0876. The validation result is 1.0082 for the retrained model. These results are promising,  but further improvement could come from adding other sales lags and longer rolling windows, selecting features more systematically, and expanding hyperparameter searches. More time and computational power would make it possible to run broader experiments, tune more complex models, and assess improvements more thoroughly. Therefore, the reported results are a useful starting point and can be further improved with additional time and compute.
 
 
